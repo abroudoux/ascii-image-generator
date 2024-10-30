@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class Main {
-    private final int size = 2;
+    private final int unit = 2;
     private BufferedImage img;
+    private StringBuilder asciiArt = new StringBuilder();
     private static final String ASCII_CHARS = "@#%*+=-:. ";
 
     public static void main(String[] args) {
@@ -36,25 +37,27 @@ public class Main {
         int originalWidth = img.getWidth();
         int originalHeight = img.getHeight();
 
-        int newWidth = originalWidth / this.size;
-        int newHeigth = originalHeight / this.size;
-
-        StringBuilder asciiArt = new StringBuilder();
+        int newWidth = originalWidth / this.unit;
+        int newHeigth = originalHeight / this.unit;
 
         for (int y = 0; y < newHeigth; y++) {
             for (int x = 0; x < newWidth; x++) {
-                int pixelColor = img.getRGB(x * this.size, y * this.size);
+                int pixelColor = img.getRGB(x * this.unit, y * this.unit);
                 int red = (pixelColor >> 16) & 0xff;
                 int green = (pixelColor >> 8) & 0xff;
                 int blue = pixelColor & 0xff;
 
                 int brightness = (red + green + blue) / 3;
                 char asciiChar = ASCII_CHARS.charAt((brightness * (ASCII_CHARS.length() - 1)) / 255);
-                asciiArt.append(asciiChar);
+                this.asciiArt.append(asciiChar);
             }
-            asciiArt.append("\n");
+            this.asciiArt.append("\n");
         }
 
-        System.err.println(asciiArt.toString());
+        this.printAsciiArt();
+    }
+
+    public void printAsciiArt() {
+        System.out.println(this.asciiArt.toString());
     }
 }
